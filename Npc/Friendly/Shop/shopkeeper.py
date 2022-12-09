@@ -1,0 +1,2 @@
+class ShopKeeper():
+  pass
