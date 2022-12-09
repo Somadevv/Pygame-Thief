@@ -24,6 +24,8 @@ while True:
     # Draw a solid blue circle in the center
     pygame.draw.circle(GAME_WINDOW, (0, 0, 255), (250, 250), 75)
 
+    #This is from harry
+
     # Flip the display
     pygame.display.update()
     CLOCK.tick(GAME_TICKRATE)
