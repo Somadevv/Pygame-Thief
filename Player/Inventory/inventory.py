@@ -5,6 +5,7 @@ DrawText = Helpers.drawText.DrawText
 
 
 class Inventory():
+
     def __init__(self):
         self.BAG_COLOR = (125, 22, 55)
         self.BAG_HEIGHT = 65
@@ -20,3 +21,15 @@ class Inventory():
         surface.blit(image, (self.BAG_XPOS, self.BAG_YPOS))
         DrawText(surface, "Tab", TEXT_SIZE, (255, 255, 255),
                  50, 385)
+
+    def GetInventory(self):
+        self.xPos = 200
+        self.yPos = 300
+        self.open = pygame.Rect(self.xPos, self.yPos, 200, 200)
+        self.close = pygame.Rect(self.xPos, self.yPos, 0, 0)
+
+    def DrawInventory(self, surface):
+        pygame.draw.rect(surface, (255, 255, 255), self.open)
+
+    def CloseInventory(self, surface):
+        pygame.draw.rect(surface, (0, 0, 0), self.close)
