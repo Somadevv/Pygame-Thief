@@ -1,32 +1,58 @@
-import pygame, sys
+import pygame
+import World.Levels.test_level as Test_Level
+import Player.player as player
+import World.world as World
+import Controller.controller
+
+# Initialise pygame
 pygame.init()
 
-# Global variables
-CLOCK = pygame.time.Clock()
-GAME_TICKRATE = 120
-SCREEN_WIDTH = 750
-SCREEN_HEIGHT = 500
-
-# Colors
-COLOR_WHITE = 255, 255, 255
-
+# Draw Screen
+SCREEN_WIDTH, SCREEN_HEIGHT = 750, 500
+CANVAS = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
 GAME_WINDOW = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+# FPS Params
+CLOCK = pygame.time.Clock()
+TARGET_FPS = 60
+GAME_TICK = 120
+
+# Run Game Bool
+running = True
+
+
+# Add Player
+Player = player.Player()
+
+# Assign Variables to Imports
+worldData = Test_Level.Test_Level()
+userControls = Controller.controller.Controller
+worldGeneration = World.World
+
+
+# Player Position on Load
+Player.position.x, Player.position.y = worldData.playerStartPosition
+
+
 # Game loop
-while True:
-    # Exit
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT : sys.exit()
+while running:
 
-    # Fill the background with white
-    GAME_WINDOW.fill((COLOR_WHITE))
+    # Define Delta Time
+    dt = CLOCK.tick(GAME_TICK) * .001 * TARGET_FPS
 
-    # Draw a solid blue circle in the center
-    pygame.draw.circle(GAME_WINDOW, (0, 0, 255), (250, 250), 75)
+    # Control
+    userControls.GameControls(Player)
 
-    #This is from harry
+    # Update Player Position
+    Player.update(dt)
 
-    # Flip the display
+    # Draw Background
+    CANVAS.fill((255, 255, 255))
+
+    # Draw Player
+    Player.draw(CANVAS)
+
+    # Draw World
+    worldGeneration.DrawWorld(CANVAS, worldData.rects)
+    GAME_WINDOW.blit(CANVAS, (0, 0))
     pygame.display.update()
-    CLOCK.tick(GAME_TICKRATE)
-
