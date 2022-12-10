@@ -12,8 +12,8 @@ class Inventory():
         self.BAG_WIDTH = 65
         self.BAG_XPOS = 20
         self.BAG_YPOS = 350
-        self.INVENTORY = [{"id": 0, "name": "cock"}, {
-            "id": 1, "name": "cock"}, {"id": 2, "name": "cock"}]
+        self.INVENTORY = [{"id": 1, "name": "cock"}, {
+            "id": 2, "name": "cock"}, {"id": 3, "name": "cock"}, {"id": 4, "name": "cock"}, {"id": 5, "name": "cock"}, {"id": 6, "name": "cock"}]
 
     def GetInventory(self):
         print("Loading Inventory...")
@@ -39,12 +39,18 @@ class Inventory():
                  50, 385)
 
     def DrawInventory(self, surface):
-        pygame.draw.rect(surface, (255, 255, 255), self.container)
+        pygame.draw.rect(surface, (0, 0, 0), self.container)
         pygame.draw.rect(surface, (210, 20, 150), self.innerContainer)
+        origin = pygame.Rect(
+            150, self.containerY + 20, 20, 20)
+#        [{"id": 0, "name": "cock"}, {
+# "id": 1, "name": "cock"}, {"id": 2, "name": "cock"}]
+
         for i in self.INVENTORY:
-            x = pygame.Rect(
-                self.containerX, self.containerY + 20, 20, 20)
-            pygame.draw.rect(surface, (140, 20, 50), x)
+
+            pygame.draw.rect(surface, (140, 20, 50),
+                             pygame.Rect(
+                origin.x * i["id"] / 4, origin.y, 20, 20))
 
     def CloseInventory(self, surface):
         pygame.draw.rect(surface, (0, 0, 0), self.close)

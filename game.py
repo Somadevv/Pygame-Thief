@@ -28,10 +28,10 @@ playerInstance = player.Player()
 
 # Assign Variables to Imports
 worldData = Test_Level.Test_Level()
-userControls = Controller.controller.Controller
+userControls = Controller.controller.Controller()
 worldGeneration = World.World
-playerInventoryOpen = False
-playerInventory = Player.Inventory.inventory.Inventory
+
+playerInventory = Player.Inventory.inventory.Inventory()
 
 # Get Player Inventory on load
 playerInventory.GetInventory()
@@ -65,7 +65,7 @@ while running:
     playerInventory.DrawInventoryBagToWindow(
         GAME_WINDOW)
 
-    if playerInventoryOpen == True:
+    if userControls.playerInventoryOpen:
         playerInventory.DrawInventory(GAME_WINDOW)
     else:
         playerInventory.CloseInventory(GAME_WINDOW)
