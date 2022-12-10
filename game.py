@@ -1,32 +1,49 @@
-import pygame, sys
+import pygame
+import sys
+import Player.Inventory.inventory
+
+
 pygame.init()
+
+playerInventory = Player.Inventory.inventory.Inventory()
+
 
 # Global variables
 CLOCK = pygame.time.Clock()
 GAME_TICKRATE = 120
-SCREEN_WIDTH = 750
-SCREEN_HEIGHT = 500
+GAME_WIDTH = 750
+GAME_HEIGHT = 500
+GAME_WINDOW = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
+playerInventoryOpen = False
 
-# Colors
-COLOR_WHITE = 255, 255, 255
+# Get Player Inventory on load
+playerInventory.GetInventory(GAME_WINDOW)
 
-GAME_WINDOW = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Game loop
 while True:
-    # Exit
+    # Fill background (BLACK)
+    GAME_WINDOW.fill((0, 0, 0))
+
+    # Draw Player inventory bag
+    playerInventory.DrawInventoryBagToWindow(
+        GAME_WINDOW)
+
+    if playerInventoryOpen == True:
+        playerInventory.DrawInventory(GAME_WINDOW)
+    else:
+        playerInventory.CloseInventory(GAME_WINDOW)
+
+    # Binds/Exit
     for event in pygame.event.get():
-        if event.type == pygame.QUIT : sys.exit()
+        if event.type == pygame.QUIT:
+            sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_TAB:
+                playerInventoryOpen = not playerInventoryOpen
 
-    # Fill the background with white
-    GAME_WINDOW.fill((COLOR_WHITE))
-
-    # Draw a solid blue circle in the center
-    pygame.draw.circle(GAME_WINDOW, (0, 0, 255), (250, 250), 75)
-
-    #This is from harry
+    pygame.display.flip()
 
     # Flip the display
     pygame.display.update()
     CLOCK.tick(GAME_TICKRATE)
-

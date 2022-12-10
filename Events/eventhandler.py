@@ -1,2 +1,6 @@
+import pygame
+
+
 class EventHandler():
-  pass
+
+    pass
