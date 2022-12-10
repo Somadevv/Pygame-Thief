@@ -14,10 +14,11 @@ GAME_TICKRATE = 120
 GAME_WIDTH = 750
 GAME_HEIGHT = 500
 GAME_WINDOW = pygame.display.set_mode((GAME_WIDTH, GAME_HEIGHT))
-PlayerInventoryOpen = False
+playerInventoryOpen = False
 
 # Get Player Inventory on load
-playerInventory.GetInventory()
+playerInventory.GetInventory(GAME_WINDOW)
+
 
 # Game loop
 while True:
@@ -28,7 +29,7 @@ while True:
     playerInventory.DrawInventoryBagToWindow(
         GAME_WINDOW)
 
-    if PlayerInventoryOpen == True:
+    if playerInventoryOpen == True:
         playerInventory.DrawInventory(GAME_WINDOW)
     else:
         playerInventory.CloseInventory(GAME_WINDOW)
@@ -39,7 +40,7 @@ while True:
             sys.exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_TAB:
-                PlayerInventoryOpen = not PlayerInventoryOpen
+                playerInventoryOpen = not playerInventoryOpen
 
     pygame.display.flip()
 
