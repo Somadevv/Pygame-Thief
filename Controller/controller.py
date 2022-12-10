@@ -1,12 +1,18 @@
 import pygame
 import sys
 
+playerInventoryOpen = False
+
 
 class Controller():
     def GameControls(Player):
         test = pygame.event.get()
         for event in test:
             if event.type == pygame.KEYDOWN:
+                # Inventory
+                if event.key == pygame.K_TAB:
+                    playerInventoryOpen = not playerInventoryOpen
+                # Movement
                 if event.key == pygame.K_a:
                     Player.LEFT_KEY = True
                 elif event.key == pygame.K_d:

@@ -15,7 +15,7 @@ class Inventory():
         self.INVENTORY = [{"id": 0, "name": "cock"}, {
             "id": 1, "name": "cock"}, {"id": 2, "name": "cock"}]
 
-    def GetInventory(self, surface):
+    def GetInventory(self):
         print("Loading Inventory...")
 
         self.containerX = 100
