@@ -1,0 +1,7 @@
+{
+  "1": { "name": "Key", "price": 1000 },
+  "2": { "name": "Axe", "price": 1000 },
+  "3": { "name": "Sword", "price": 1000 },
+  "4": { "name": "Shield", "price": 1000 },
+  "5": { "name": "Potion", "price": 1000 }
+}

@@ -1,21 +1,28 @@
 import pygame
+import json
 import Helpers.drawText
 
 DrawText = Helpers.drawText.DrawText
 
+# Opening JSON file
+test = open('Data/items.json')
+data = json.load(test)
+
 
 class Inventory():
 
-    def __init__(self):
+    def __init__(self, surface):
         self.BAG_COLOR = (125, 22, 55)
         self.BAG_HEIGHT = 65
         self.BAG_WIDTH = 65
         self.BAG_XPOS = 20
         self.BAG_YPOS = 350
-        self.INVENTORY = [{"id": 1, "name": "cock"}, {
-            "id": 2, "name": "cock"}, {"id": 3, "name": "cock"}, {"id": 4, "name": "cock"}, {"id": 5, "name": "cock"}, {"id": 6, "name": "cock"}]
+        self.INVENTORY = {}
+        self.update = False
+        self.isOpen = False
+        self.surface = surface
 
-    def GetInventory(self):
+    def get_inventory(self):
         print("Loading Inventory...")
 
         self.containerX = 100
@@ -29,7 +36,7 @@ class Inventory():
         # Inventory CLOSE
         self.close = pygame.Rect(self.containerX, self.containerY, 0, 0)
 
-    def DrawInventoryBagToWindow(self, surface):
+    def draw_inventory_bag_to_window(self, surface):
         BAG_ICON = pygame.image.load("Assets/Images/Icons/bag.png").convert()
         TEXT_SIZE = 20
         image = pygame.transform.scale(
@@ -38,34 +45,51 @@ class Inventory():
         DrawText(surface, "Tab", TEXT_SIZE, (255, 255, 255),
                  50, 385)
 
-    def DrawInventory(self, surface):
+    def update_inventory(self, surface):
         pygame.draw.rect(surface, (0, 0, 0), self.container)
-        pygame.draw.rect(surface, (210, 20, 150), self.innerContainer)
+        pygame.draw.rect(surface, (255, 255, 255), self.innerContainer)
         origin = pygame.Rect(
             150, self.containerY + 20, 20, 20)
-#        [{"id": 0, "name": "cock"}, {
-# "id": 1, "name": "cock"}, {"id": 2, "name": "cock"}]
 
-        for i in self.INVENTORY:
+        y_offset = 40
+        for i, item in enumerate(self.INVENTORY):
 
-            pygame.draw.rect(surface, (140, 20, 50),
-                             pygame.Rect(
-                origin.x * i["id"] / 4, origin.y, 20, 20))
+            pygame.draw.rect(surface, (0, 0, 0), pygame.Rect(
+                130 + (i % 3) * 40, origin.y + y_offset * (i // 3), 25, 25))
 
-    def CloseInventory(self, surface):
+    def close_inventory(self, surface):
         pygame.draw.rect(surface, (0, 0, 0), self.close)
 
-    def AddItem(self, item):
-        if item not in self.INVENTORY:
-            self.INVENTORY.append(item)
-            print("Item Added: ", item)
+    def add_item(self, itemId):
 
-    def DeleteItem(self, item):
-        if item in self.INVENTORY:
-            itemFound = self.INVENTORY.index(item)
-            self.INVENTORY.pop(itemFound)
-            print("Item Removed: ", item)
+        itemId = str(itemId)
+        if itemId in data:
+            if itemId not in self.INVENTORY:
+                self.INVENTORY[itemId] = {
+                    "name": data[itemId]["name"], "price": data[itemId]["price"]}
+                print("Added")
+                print(self.INVENTORY)
+            else:
+                print("Item already in inventory")
 
-    def PickUpItem(self, item):
+    def delete_item(self, itemId):
+
+        print(self.INVENTORY)
+        itemId = str(itemId)
+        if itemId not in self.INVENTORY:
+            print("No item found with that ID")
+        else:
+            self.INVENTORY.pop(itemId)
+            print(self.INVENTORY)
+
+        # self.INVENTORY = [
+        #     item for item in self.INVENTORY if item['id'] != itemId]
+
+        # if id in self.INVENTORY:
+        #     itemFound = self.INVENTORY.index(id)
+        #     self.INVENTORY.pop(itemFound)
+        #     print("Item Removed: ", id)
+
+    def pick_up_item(self, item):
         if item in self.INVENTORY:
             print("Duplicate item found")

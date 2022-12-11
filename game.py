@@ -8,7 +8,6 @@ import Player.Inventory.inventory
 # Initialise pygame
 pygame.init()
 
-
 # Draw Screen
 SCREEN_WIDTH, SCREEN_HEIGHT = 750, 500
 CANVAS = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -31,10 +30,10 @@ worldData = Test_Level.Test_Level()
 userControls = Controller.controller.Controller()
 worldGeneration = World.World
 
-playerInventory = Player.Inventory.inventory.Inventory()
+playerInventory = Player.Inventory.inventory.Inventory(GAME_WINDOW)
 
 # Get Player Inventory on load
-playerInventory.GetInventory()
+playerInventory.get_inventory()
 
 
 # Player Position on Load
@@ -50,7 +49,7 @@ while running:
     dt = CLOCK.tick(GAME_TICK) * .001 * TARGET_FPS
 
     # Control
-    userControls.GameControls(playerInstance)
+    userControls.GameControls(playerInstance, GAME_WINDOW)
 
     # Update Player Position
     playerInstance.update(dt)
@@ -62,12 +61,12 @@ while running:
     playerInstance.draw(CANVAS)
 
     # Draw Player inventory bag
-    playerInventory.DrawInventoryBagToWindow(
+    playerInventory.draw_inventory_bag_to_window(
         GAME_WINDOW)
 
     if userControls.playerInventoryOpen:
-        playerInventory.DrawInventory(GAME_WINDOW)
+        playerInventory.update_inventory(GAME_WINDOW)
     else:
-        playerInventory.CloseInventory(GAME_WINDOW)
+        playerInventory.close_inventory(GAME_WINDOW)
 
     pygame.display.update()
