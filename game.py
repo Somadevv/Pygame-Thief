@@ -28,10 +28,10 @@ playerInstance = player.Player()
 
 # Assign Variables to Imports
 worldData = Test_Level.Test_Level()
-playerInventory = Player.Inventory.inventory.Inventory(GAME_WINDOW)
-userControls = Controller.controller.Controller()
+userControls = Controller.controller.Controller(GAME_WINDOW)
 worldGeneration = World.World
 
+playerInventory = Player.Inventory.inventory.Inventory(GAME_WINDOW)
 
 # Get Player Inventory on load
 playerInventory.get_inventory()
@@ -61,13 +61,7 @@ while running:
     # Draw Player
     playerInstance.draw(CANVAS)
 
-    # Draw Player inventory bag
-    playerInventory.draw_inventory_bag_to_window(
-        GAME_WINDOW)
-
-    if playerInventory.isOpen:
-        playerInventory.update_inventory(GAME_WINDOW)
-    else:
-        playerInventory.close_inventory(GAME_WINDOW)
+    # Draw Player inventory
+    playerInventory.initialize()
 
     pygame.display.update()
