@@ -65,12 +65,14 @@ class Inventory():
         itemId = str(itemId)
         if itemId in data:
             if itemId not in self.INVENTORY:
+                print(self.INVENTORY)
                 self.INVENTORY[itemId] = {
                     "name": data[itemId]["name"], "price": data[itemId]["price"]}
                 print("Added")
-                print(self.INVENTORY)
             else:
                 print("Item already in inventory")
+        else:
+            print("No item with that ID exists")
 
     def delete_item(self, itemId):
 
