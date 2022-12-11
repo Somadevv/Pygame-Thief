@@ -10,6 +10,16 @@ class Player():
         self.position, self.velocity = pygame.math.Vector2(
             0, 0), pygame.math.Vector2(0, 0)
         self.acceleration = pygame.math.Vector2(0, self.gravity)
+        self.gold = 50
+
+    def add_gold(self, amount):
+        self.gold += amount
+
+    def remove_gold(self, amount):
+        self.gold -= amount
+
+    def reset_gold(self):
+        self.gold = 0
 
     def draw(self, display):
         pygame.draw.rect(display, (255, 0, 0), self.rect)
