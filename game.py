@@ -1,4 +1,5 @@
 import pygame
+import sys
 import World.Levels.test_level as Test_Level
 import Player.player as player
 import World.world as World
@@ -15,7 +16,7 @@ GAME_WINDOW = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # FPS Params
 CLOCK = pygame.time.Clock()
-TARGET_FPS = 60
+TARGET_FPS = 1
 GAME_TICK = 120
 
 # Run Game Bool
@@ -60,13 +61,7 @@ while running:
     # Draw Player
     playerInstance.draw(CANVAS)
 
-    # Draw Player inventory bag
-    playerInventory.draw_inventory_bag_to_window(
-        GAME_WINDOW)
-
-    if userControls.playerInventoryOpen:
-        playerInventory.update_inventory(GAME_WINDOW)
-    else:
-        playerInventory.close_inventory(GAME_WINDOW)
+    # Draw Player inventory
+    playerInventory.initialize()
 
     pygame.display.update()
