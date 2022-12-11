@@ -17,7 +17,8 @@ class Inventory():
         self.BAG_WIDTH = 65
         self.BAG_XPOS = 20
         self.BAG_YPOS = 350
-        self.INVENTORY = {}
+        self.INVENTORY = {"1": {"name": "Key", "price": 1000}, "2": {
+            "name": "Key", "price": 1000}, "3": {"name": "Key", "price": 1000}}
         self.update = False
         self.isOpen = False
         self.surface = surface
@@ -46,6 +47,8 @@ class Inventory():
                  50, 385)
 
     def update_inventory(self, surface):
+        print(self.INVENTORY)
+
         pygame.draw.rect(surface, (0, 0, 0), self.container)
         pygame.draw.rect(surface, (255, 255, 255), self.innerContainer)
         origin = pygame.Rect(
@@ -65,16 +68,17 @@ class Inventory():
         itemId = str(itemId)
         if itemId in data:
             if itemId not in self.INVENTORY:
+                print(self.INVENTORY)
                 self.INVENTORY[itemId] = {
                     "name": data[itemId]["name"], "price": data[itemId]["price"]}
                 print("Added")
-                print(self.INVENTORY)
             else:
                 print("Item already in inventory")
+        else:
+            print("No item with that ID exists")
 
     def delete_item(self, itemId):
 
-        print(self.INVENTORY)
         itemId = str(itemId)
         if itemId not in self.INVENTORY:
             print("No item found with that ID")

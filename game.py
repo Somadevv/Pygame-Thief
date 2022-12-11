@@ -27,7 +27,7 @@ playerInstance = player.Player()
 
 # Assign Variables to Imports
 worldData = Test_Level.Test_Level()
-userControls = Controller.controller.Controller()
+userControls = Controller.controller.Controller(GAME_WINDOW)
 worldGeneration = World.World
 
 playerInventory = Player.Inventory.inventory.Inventory(GAME_WINDOW)
@@ -49,7 +49,7 @@ while running:
     dt = CLOCK.tick(GAME_TICK) * .001 * TARGET_FPS
 
     # Control
-    userControls.GameControls(playerInstance, GAME_WINDOW)
+    userControls.GameControls(playerInstance)
 
     # Update Player Position
     playerInstance.update(dt)

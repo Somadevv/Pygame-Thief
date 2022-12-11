@@ -5,12 +5,12 @@ import Player.Inventory.inventory
 
 class Controller():
 
-    def __init__(self):
+    def __init__(self, surface):
         self.playerInventoryOpen = False
+        self.playerInventory = Player.Inventory.inventory.Inventory(surface)
 
-    def GameControls(self, player, surface):
+    def GameControls(self, player):
         test = pygame.event.get()
-        playerInventory = Player.Inventory.inventory.Inventory(surface)
         for event in test:
             if event.type == pygame.KEYDOWN:
                 # Inventory
@@ -19,9 +19,9 @@ class Controller():
                     self.playerInventoryOpen = not self.playerInventoryOpen
                 # Movement
                 if event.key == pygame.K_1:
-                    playerInventory.add_item(1)
+                    self.playerInventory.add_item(1)
                 if event.key == pygame.K_2:
-                    playerInventory.delete_item(1)
+                    self.playerInventory.delete_item(1)
                 if event.key == pygame.K_a:
                     player.LEFT_KEY = True
                 elif event.key == pygame.K_d:
@@ -33,7 +33,7 @@ class Controller():
                     sys.exit()
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_1:
-                    playerInventory.update = False
+                    self.playerInventory.update = False
                 if event.key == pygame.K_a:
                     player.LEFT_KEY = False
                 elif event.key == pygame.K_d:
