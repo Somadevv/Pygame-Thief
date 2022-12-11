@@ -22,6 +22,7 @@ class Inventory():
         self.update = False
         self.isOpen = False
         self.surface = surface
+        self.isOpen = False
 
     def get_inventory(self):
         print("Loading Inventory...")
@@ -84,15 +85,8 @@ class Inventory():
             print("No item found with that ID")
         else:
             self.INVENTORY.pop(itemId)
+            print(itemId)
             print(self.INVENTORY)
-
-        # self.INVENTORY = [
-        #     item for item in self.INVENTORY if item['id'] != itemId]
-
-        # if id in self.INVENTORY:
-        #     itemFound = self.INVENTORY.index(id)
-        #     self.INVENTORY.pop(itemFound)
-        #     print("Item Removed: ", id)
 
     def pick_up_item(self, item):
         if item in self.INVENTORY:
