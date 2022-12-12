@@ -1,7 +1,7 @@
 import pygame
 import sys
 import Player.inventory
-import Handlers.shophandler
+import Handlers.shopHandler
 
 
 class Controller():
@@ -10,7 +10,7 @@ class Controller():
         self.surface = surface
         self.playerInventory = Player.inventory.Inventory(
             self.surface)
-        self.shop = Handlers.shophandler.Shop(self.surface)
+        self.shop = Handlers.shopHandler.Shop(self.surface)
 
     def GameControls(self, player):
         test = pygame.event.get()

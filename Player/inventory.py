@@ -1,12 +1,10 @@
 import pygame
 import json
 import Helpers.drawText
+import Helpers.loadFile
 
-DrawText = Helpers.drawText.DrawText
-
-# Opening JSON file
-test = open('Data/items.json')
-data = json.load(test)
+loadFile = Helpers.loadFile.load_file
+drawText = Helpers.drawText.DrawText
 
 
 class Inventory:
@@ -21,6 +19,7 @@ class Inventory:
         self.INVENTORY = {}
         self.toggleInventory = False
         self.surface = surface
+        self.gameItems = loadFile('Data/items.json')
 
     def load(self):
         print("Loaded player inventory...")
@@ -53,7 +52,7 @@ class Inventory:
 
                 pygame.draw.rect(self.surface, (0, 0, 0), pygame.Rect(
                     xPos, yPos, width, height), 1)
-                DrawText(self.surface, self.INVENTORY[item]["name"], textSize, textColor,
+                drawText(self.surface, self.INVENTORY[item]["name"], textSize, textColor,
                          xPos + width / 2, yPos + height / 2)
 
     def open(self):
@@ -65,14 +64,14 @@ class Inventory:
         pygame.draw.rect(self.surface, (0, 0, 0), self.closeContainer)
 
     def add_item(self, itemId):
-
         itemId = str(itemId)
-        if itemId in data:
+        if itemId in self.gameItems:
             if itemId not in self.INVENTORY:
                 self.INVENTORY[itemId] = {
-                    "name": data[itemId]["name"], "price": data[itemId]["price"]}
-            else:
-                print("Item already in inventory")
+                    "name": self.gameItems[itemId]["name"], "price": self.gameItems[itemId]["price"]}
+                # print("Added", self.INVENTORY)
+            # else:
+            #     print("Item already in inventory")
         else:
             print("No item with that ID exists")
 
@@ -89,16 +88,17 @@ class Inventory:
             print("Duplicate item found")
 
     def draw_bag_to_window(self):
-        BAG_HEIGHT = 65
-        BAG_WIDTH = 65
-        BAG_XPOS = 20
-        BAG_YPOS = 350
-        BAG_ICON = pygame.image.load("Assets/Images/Icons/bag.png").convert()
-        TEXT_SIZE = 20
+        bagWidth = 65
+        bagHeight = 65
+        bagXpos = 20
+        bagYpos = 350
+        bagIcon = pygame.image.load(
+            "Assets/Images/Icons/bag.png").convert_alpha()
+        textSize = 20
         image = pygame.transform.scale(
-            BAG_ICON, (BAG_WIDTH, BAG_HEIGHT))
-        self.surface.blit(image, (BAG_XPOS, BAG_YPOS))
-        DrawText(self.surface, "Tab", TEXT_SIZE, (255, 255, 255),
+            bagIcon, (bagWidth, bagHeight))
+        self.surface.blit(image, (bagXpos, bagYpos))
+        drawText(self.surface, "Tab", textSize, (255, 255, 255),
                  50, 385)
 
     def initialize(self):

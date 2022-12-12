@@ -1,8 +1,10 @@
 import pygame
+import Helpers.drawText
+drawText = Helpers.drawText.DrawText
 
 
 class Player():
-    def __init__(self):
+    def __init__(self, surface):
         self.rect = pygame.Rect(0, 0, 20, 40)
         self.LEFT_KEY, self.RIGHT_KEY = False, False
         self.is_jumping, self.on_ground = False, False
@@ -10,16 +12,34 @@ class Player():
         self.position, self.velocity = pygame.math.Vector2(
             0, 0), pygame.math.Vector2(0, 0)
         self.acceleration = pygame.math.Vector2(0, self.gravity)
-        self.gold = 50
+        self.gold = 15
+        self.surface = surface
 
     def add_gold(self, amount):
         self.gold += amount
 
     def remove_gold(self, amount):
         self.gold -= amount
+        self.render_gold()
 
     def reset_gold(self):
         self.gold = 0
+
+    def render_gold(self):
+        coinWidth = 20
+        coinHeight = 20
+        textSize = 16
+        textColor = (255, 255, 255)
+        coinXpos = 5
+        coinYPos = 5
+        coinIcon = pygame.image.load(
+            "Assets/Images/Icons/coin.png").convert_alpha()
+        coinImage = pygame.transform.scale(
+            coinIcon, (coinWidth, coinHeight))
+
+        self.surface.blit(coinImage, (coinXpos, coinYPos))
+        drawText(self.surface, str(self.gold), textSize, textColor,
+                 38, 17.75)
 
     def draw(self, display):
         pygame.draw.rect(display, (255, 0, 0), self.rect)
@@ -65,3 +85,7 @@ class Player():
             self.is_jumping = True
             self.velocity.y -= 8
             self.on_ground = False
+
+    def initialize(self, dt):
+        self.render_gold()
+        self.update(dt)

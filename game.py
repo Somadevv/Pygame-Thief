@@ -5,7 +5,7 @@ import Player.player as player
 import World.world as World
 import Controller.controller
 import Player.inventory
-import Handlers.shophandler
+import Handlers.shopHandler
 
 # Initialise pygame
 pygame.init()
@@ -25,14 +25,14 @@ running = True
 
 
 # Add Player
-playerInstance = player.Player()
+playerInstance = player.Player(GAME_WINDOW)
 
 # Assign Variables to Imports
 worldData = Test_Level.Test_Level()
 userControls = Controller.controller.Controller(GAME_WINDOW)
 worldGeneration = World.World
 inventory = Player.inventory.Inventory(GAME_WINDOW)
-shopHandler = Handlers.shophandler.Shop(GAME_WINDOW)
+shopHandler = Handlers.shopHandler.Shop(GAME_WINDOW)
 
 # Get Player Inventory on load
 inventory.load()
@@ -40,7 +40,7 @@ inventory.load()
 
 # Player Position on Load
 playerInstance.position.x, playerInstance.position.y = worldData.playerStartPosition
-
+3
 # Game loop
 while running:
     # Draw World
@@ -54,10 +54,10 @@ while running:
     userControls.GameControls(playerInstance)
 
     # Update Player Position
-    playerInstance.update(dt)
+    playerInstance.initialize(dt)
 
     # Draw Background
-    CANVAS.fill((255, 255, 255))
+    CANVAS.fill((77, 77, 77))
 
     # Draw Player
     playerInstance.draw(CANVAS)
