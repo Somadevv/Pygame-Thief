@@ -1,8 +1,9 @@
 import pygame
+import World.worldGenerator
 import sys
 import World.Levels.test_level as Test_Level
 import Player.player as player
-import World.world as World
+import World.world
 import Controller.controller
 import Player.Inventory.inventory
 
@@ -27,6 +28,9 @@ running = True
 playerInstance = player.Player()
 
 # Assign Variables to Imports
+worldData = World.worldGenerator.worldGenerator()
+userControls = Controller.controller.Controller()
+worldGeneration = World.world.World
 worldData = Test_Level.Test_Level()
 userControls = Controller.controller.Controller(GAME_WINDOW)
 worldGeneration = World.World
@@ -38,7 +42,7 @@ playerInventory.get_inventory()
 
 
 # Player Position on Load
-playerInstance.position.x, playerInstance.position.y = worldData.playerStartPosition
+playerInstance.position.x, playerInstance.position.y = 0, 0
 
 # Game loop
 while running:
@@ -50,10 +54,10 @@ while running:
     dt = CLOCK.tick(GAME_TICK) * .001 * TARGET_FPS
 
     # Control
-    userControls.GameControls(playerInstance)
+    userControls.GameControls(playerInstance, worldData.rects)
 
     # Update Player Position
-    playerInstance.update(dt)
+    playerInstance.initialize(dt, worldData.rects)
 
     # Draw Background
     CANVAS.fill((255, 255, 255))
