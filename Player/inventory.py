@@ -22,16 +22,8 @@ class Inventory:
         self.toggleInventory = False
         self.surface = surface
 
-    def initialize(self):
-        self.draw_bag_to_window()
-
-        if self.toggleInventory:
-            self.open_inventory()
-        else:
-            self.close_inventory()
-
-    def get_inventory(self):
-        print("Loading Inventory...")
+    def load(self):
+        print("Loaded player inventory...")
 
         self.containerX = 100
         self.containerY = 200
@@ -42,10 +34,10 @@ class Inventory:
         self.innerContainer = pygame.Rect(
             self.containerX + 10, self.containerY + 10, 180, 180)
         #  CLOSE
-        self.close = pygame.Rect(self.containerX, self.containerY, 0, 0)
+        self.closeContainer = pygame.Rect(
+            self.containerX, self.containerY, 0, 0)
 
-    def update_inventory_items(self):
-
+    def update(self):
         origin = pygame.Rect(
             150, self.containerY + 20, 20, 20)
         if self.INVENTORY:
@@ -63,26 +55,22 @@ class Inventory:
                     xPos, yPos, width, height), 1)
                 DrawText(self.surface, self.INVENTORY[item]["name"], textSize, textColor,
                          xPos + width / 2, yPos + height / 2)
-        else:
-            print("Inventory is empty")
 
-    def open_inventory(self):
+    def open(self):
         pygame.draw.rect(self.surface, (0, 0, 0), self.container)
         pygame.draw.rect(self.surface, (255, 255, 255), self.innerContainer)
-        self.update_inventory_items()
+        self.update()
 
-    def close_inventory(self):
-        pygame.draw.rect(self.surface, (0, 0, 0), self.close)
+    def close(self):
+        pygame.draw.rect(self.surface, (0, 0, 0), self.closeContainer)
 
     def add_item(self, itemId):
 
         itemId = str(itemId)
         if itemId in data:
             if itemId not in self.INVENTORY:
-                print(self.INVENTORY)
                 self.INVENTORY[itemId] = {
                     "name": data[itemId]["name"], "price": data[itemId]["price"]}
-                print("Added")
             else:
                 print("Item already in inventory")
         else:
@@ -95,8 +83,6 @@ class Inventory:
             print("No item found with that ID")
         else:
             self.INVENTORY.pop(itemId)
-            print(itemId)
-            print(self.INVENTORY)
 
     def pick_up_item(self, item):
         if item in self.INVENTORY:
@@ -114,3 +100,11 @@ class Inventory:
         self.surface.blit(image, (BAG_XPOS, BAG_YPOS))
         DrawText(self.surface, "Tab", TEXT_SIZE, (255, 255, 255),
                  50, 385)
+
+    def initialize(self):
+        self.draw_bag_to_window()
+
+        if self.toggleInventory:
+            self.open()
+        else:
+            self.close()
