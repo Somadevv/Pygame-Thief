@@ -1,5 +1,7 @@
 import pygame
 import World.worldGenerator
+import sys
+import World.Levels.test_level as Test_Level
 import Player.player as player
 import World.world
 import Controller.controller
@@ -8,7 +10,6 @@ import Player.Inventory.inventory
 # Initialise pygame
 pygame.init()
 
-
 # Draw Screen
 SCREEN_WIDTH, SCREEN_HEIGHT = 750, 500
 CANVAS = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -16,7 +17,7 @@ GAME_WINDOW = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # FPS Params
 CLOCK = pygame.time.Clock()
-TARGET_FPS = 60
+TARGET_FPS = 1
 GAME_TICK = 120
 
 # Run Game Bool
@@ -30,11 +31,14 @@ playerInstance = player.Player()
 worldData = World.worldGenerator.worldGenerator()
 userControls = Controller.controller.Controller()
 worldGeneration = World.world.World
+worldData = Test_Level.Test_Level()
+userControls = Controller.controller.Controller(GAME_WINDOW)
+worldGeneration = World.World
 
-playerInventory = Player.Inventory.inventory.Inventory()
+playerInventory = Player.Inventory.inventory.Inventory(GAME_WINDOW)
 
 # Get Player Inventory on load
-playerInventory.GetInventory()
+playerInventory.get_inventory()
 
 
 # Player Position on Load
@@ -61,13 +65,7 @@ while running:
     # Draw Player
     playerInstance.draw(CANVAS)
 
-    # Draw Player inventory bag
-    playerInventory.DrawInventoryBagToWindow(
-        GAME_WINDOW)
-
-    if userControls.playerInventoryOpen:
-        playerInventory.DrawInventory(GAME_WINDOW)
-    else:
-        playerInventory.CloseInventory(GAME_WINDOW)
+    # Draw Player inventory
+    playerInventory.initialize()
 
     pygame.display.update()
