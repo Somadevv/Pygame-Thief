@@ -18,8 +18,8 @@ class Inventory:
     def __init__(self, surface):
         self.INVENTORY = {}
         self.toggleInventory = False
-        self.surface = surface
         self.gameItems = loadFile('Data/items.json')
+        self.surface = surface
 
     def load(self):
         print("Loaded player inventory...")
@@ -69,9 +69,9 @@ class Inventory:
             if itemId not in self.INVENTORY:
                 self.INVENTORY[itemId] = {
                     "name": self.gameItems[itemId]["name"], "price": self.gameItems[itemId]["price"]}
-                # print("Added", self.INVENTORY)
-            # else:
-            #     print("Item already in inventory")
+                print("Added", self.INVENTORY)
+            else:
+                print("Item already in inventory")
         else:
             print("No item with that ID exists")
 
@@ -101,8 +101,9 @@ class Inventory:
         drawText(self.surface, "Tab", textSize, (255, 255, 255),
                  50, 385)
 
-    def initialize(self):
+    def initialize(self, surface):
         self.draw_bag_to_window()
+        self.surface = surface
 
         if self.toggleInventory:
             self.open()

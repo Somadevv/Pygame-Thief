@@ -1,14 +1,80 @@
+from typing import List
 import pygame
-import Helpers.loadFile
 import Helpers.drawText
-import Player.inventory
+import Controller.controller
 import Player.player
-# Load game items
+
+
 loadFile = Helpers.loadFile.load_file
 drawText = Helpers.drawText.DrawText
 
+shopItems = loadFile('Data/items.json')
+
+controller = Controller.controller.Controller()
+
+
+class Button:
+    def __init__(self):
+        self.buttons: List[Button()] = []
+        # self.base_rect is going to be the one that never gets modified
+        # self.base_rect = rect
+        # self.rect is going to be the one that is active
+        # self.rect = rect
+        self.base_pos = pygame.Vector2(750 / 3, 150)
+        self.width = 30
+        self.height = 30
+        self.y_offset = 50
+        self.x_offset = 50
+
+    def button_rects(self):
+        for i, item in enumerate(shopItems):
+            offset_vector = pygame.Vector2(
+                self.x_offset*(i % 3), self.y_offset*(i//3))
+            pos = self.base_pos + offset_vector
+            self.buttons.append(pygame.Rect(
+                pos.x, pos.y, self.width, self.height))
+
+    def render_buttons(self, screen):
+        for i in self.buttons:
+            pygame.draw.rect(screen, "white", i)
+
+        self.button_collision()
+
+    def button_collision(self) -> bool:
+        mouse_pos = pygame.Vector2(pygame.mouse.get_pos())
+        for i, item in enumerate(self.buttons):
+            if item.collidepoint(mouse_pos):
+                print(i)
+                item.width = 40
+                item.height = 40
+                # self.player.remove_gold(shopItems[str(i + 1)]["price"])
+            else:
+                item.w = 30
+                item.h = 30
+
+    # def button_scale(self, scale_factor=1.2) -> None:
+    #     width = self.base_rect.width * scale_factor
+    #     height = self.base_rect.height * scale_factor
+
+    #     c_pos = self.base_rect.center
+
+    #     self.rect = pygame.Rect(0, 0, width, height)
+    #     self.rect.center = c_pos
+
+    # def button_controls(self, screen):
+    #     mouse_pos = pygame.Vector2(pygame.mouse.get_pos())
+    #     for i, button in enumerate(self.buttons):
+    #         if button.collidepoint(mouse_pos):
+    #             button.scale(1.2)
+    #             self.player.remove_gold(shopItems[str(i + 1)]["price"])
+    #         else:
+    #             button.scale(1)
+
+    #         pygame.draw.rect(screen, "white", button.rect)
+
 
 class Shop:
+    # Buy, Sell, Standard/Special Items (tabs?)
     _instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -16,74 +82,41 @@ class Shop:
             cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self, surface):
-        self.surface = surface
+    def __init__(self):
+
+        self.button = Button()
         self.toggleOpen = False
-        self.shopItems = loadFile('Data/items.json')
-        self.playerInventory = Player.inventory.Inventory(surface)
-        self.player = Player.player.Player(surface)
+        # self.playerInventory = Player.inventory.Inventory(screen)
+        # self.player = Player.player.Player(screen)
+        self.pressed = False
+        self.isCollided = False
 
-    def open(self):
-        self.toggleOpen = True
-        self.containerWidth = 750 / 2
-        containerHeight = 500 / 2
-        self.containerX = (750 / 2) - self.containerWidth / 2
-        self.containerY = (500 / 2) - containerHeight / 2
-        containerColor = (0, 0, 0)
+    def open(self, screen):
+        self.containerWidth = screen.get_width() / 2
+        self.containerHeight = screen.get_height() / 2
+        self.containerX = self.containerWidth - self.containerWidth / 2
+        self.containerY = self.containerHeight - self.containerHeight / 2
+        self.containerColor = (0, 0, 0)
 
-        pygame.draw.rect(self.surface, containerColor, pygame.Rect(self.containerX, self.containerY,
-                                                                   self.containerWidth, containerHeight))
-        self.render_items()
-        # self.playerInventory.close()
+        pygame.draw.rect(screen, self.containerColor, pygame.Rect(self.containerX, self.containerY,
+                                                                  self.containerWidth, self.containerHeight))
+        self.button.button_rects()
 
-    def render_items(self):
-        if pygame.mouse.get_pressed[0] and "buyButton":
-            self.buy(self.shopItems[2]["price"], 2)
-
-        for i, item in enumerate(self.shopItems):
-            # Grid column spacing
-            y_offset = 70
-            width = 50
-            height = 50
-            xPos = (self.containerX + width / 2) + \
-                (i % 3) * (self.containerWidth / 3)
-            yPos = (self.containerY + height / 2) + y_offset * (i // 3)
-            textSize = 14
-            textColor = (255, 255, 255)
-            if (self.player.gold < self.shopItems[item]["price"]):
-                textColor = (230, 50, 8)
-            else:
-                textColor = (8, 230, 92)
-            itemIconWidth = 75
-            itemIconHeight = 50
-            itemIconX = xPos - itemIconWidth / 2
-            itemIconY = yPos - itemIconHeight / 2
-            itemLoad = pygame.image.load(
-                "Assets/Images/Icons/potion.png").convert_alpha()
-            itemImage = pygame.transform.scale(
-                itemLoad, (itemIconWidth, itemIconHeight))
-
-            buyButton = pygame.draw.rect(self.surface, (198, 230, 8), pygame.Rect(
-                xPos, yPos, width, height), 1)
-            renderItemImage = self.surface.blit(
-                itemImage, (itemIconX, itemIconY))
-            itemPrice = drawText(self.surface, str(self.shopItems[item]["price"]), textSize, textColor,
-                                 xPos + width / 2, yPos + height / 2)
-
-    def close(self):
+    def close_inv(self):
         self.toggleOpen = False
 
-    def buy(self, price, itemId):
+    def shop_buy(self, price, itemId):
         print(itemId)
-        self.player.remove_gold(price)
-        self.playerInventory.add_item(itemId)
+        # self.player.remove_gold(price)
+        # self.playerInventory.add_item(itemId)
 
-    def sell(self, itemId):
+    def shop_sell(self, itemId):
         pass
 
-    def initialize(self):
+    def initialize(self, screen):
 
-        if self.toggleOpen:
-            self.open()
+        if controller.toggleShop:
+            self.open(screen)
+            self.button.render_buttons(screen)
         else:
-            self.close()
+            self.close_inv()

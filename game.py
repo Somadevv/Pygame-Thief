@@ -29,10 +29,10 @@ playerInstance = player.Player(GAME_WINDOW)
 
 # Assign Variables to Imports
 worldData = Test_Level.Test_Level()
-userControls = Controller.controller.Controller(GAME_WINDOW)
+userControls = Controller.controller.Controller()
 worldGeneration = World.World
 inventory = Player.inventory.Inventory(GAME_WINDOW)
-shopHandler = Handlers.shopHandler.Shop(GAME_WINDOW)
+shopHandler = Handlers.shopHandler.Shop()
 
 # Get Player Inventory on load
 inventory.load()
@@ -51,7 +51,7 @@ while running:
     dt = CLOCK.tick(GAME_TICK) * .001 * TARGET_FPS
 
     # Control
-    userControls.GameControls(playerInstance)
+    userControls.GameControls(playerInstance, CANVAS)
 
     # Update Player Position
     playerInstance.initialize(dt)
@@ -60,12 +60,12 @@ while running:
     CANVAS.fill((77, 77, 77))
 
     # Draw Player
-    playerInstance.draw(CANVAS)
+    playerInstance.draw(GAME_WINDOW)
 
     # Draw Player inventory
-    inventory.initialize()
+    inventory.initialize(GAME_WINDOW)
 
     # Draw Player inventory
-    shopHandler.initialize()
+    shopHandler.initialize(GAME_WINDOW)
 
     pygame.display.update()

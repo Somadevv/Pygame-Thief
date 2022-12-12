@@ -4,6 +4,13 @@ drawText = Helpers.drawText.DrawText
 
 
 class Player():
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self, surface):
         self.rect = pygame.Rect(0, 0, 20, 40)
         self.LEFT_KEY, self.RIGHT_KEY = False, False
@@ -12,15 +19,17 @@ class Player():
         self.position, self.velocity = pygame.math.Vector2(
             0, 0), pygame.math.Vector2(0, 0)
         self.acceleration = pygame.math.Vector2(0, self.gravity)
-        self.gold = 15
+        self.gold = 5000
         self.surface = surface
 
     def add_gold(self, amount):
         self.gold += amount
 
     def remove_gold(self, amount):
+        print("amount", amount)
+        # self.render_gold()
         self.gold -= amount
-        self.render_gold()
+        print("Gold", self.gold)
 
     def reset_gold(self):
         self.gold = 0
